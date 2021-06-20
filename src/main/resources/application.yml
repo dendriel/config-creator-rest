@@ -1,0 +1,11 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: true
+
+auth:
+  service:
+    url: ${AUTH_URL:http://localhost:8080}
