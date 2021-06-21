@@ -31,8 +31,8 @@ public class TemplateBusinessImpl implements TemplateBusiness {
     }
 
     @Override
-    public void remove(ObjectId id) {
-        templateDao.deleteById(id);
+    public boolean remove(ObjectId id) {
+        return templateDao.deleteById(id);
     }
 
     @Override
@@ -40,5 +40,8 @@ public class TemplateBusinessImpl implements TemplateBusiness {
         return templateDao.update(template);
     }
 
-
+    @Override
+    public long count() {
+        return templateDao.count();
+    }
 }

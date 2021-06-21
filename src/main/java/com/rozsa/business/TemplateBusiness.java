@@ -14,5 +14,7 @@ public interface TemplateBusiness {
 
     List<Template> findAll(int offset, int limit);
 
-    void remove(ObjectId id);
+    boolean remove(ObjectId id);
+
+    long count();
 }

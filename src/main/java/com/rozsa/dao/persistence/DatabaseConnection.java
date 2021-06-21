@@ -17,4 +17,6 @@ public interface DatabaseConnection {
     <T> List<T> findAll(Class<T> kind, String collection, int offset, int limit);
 
     <T> boolean deleteById(ObjectId id, Class<T> kind, String collection);
+
+    <T> long count(Class<T> kind, String collection);
 }

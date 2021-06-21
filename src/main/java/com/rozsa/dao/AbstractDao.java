@@ -56,4 +56,8 @@ public abstract class AbstractDao<TType extends Identifiable> {
     public boolean deleteById(ObjectId id) {
         return db.deleteById(id, objKind, collectionName);
     }
+
+    public long count() {
+        return db.count(objKind, collectionName);
+    }
 }

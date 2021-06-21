@@ -123,4 +123,10 @@ public class MongoConnection implements DatabaseConnection {
 
         return result.getDeletedCount() > 0;
     }
+
+    public <T> long count(Class<T> kind, String collection) {
+        MongoCollection<T> coll = db.getCollection(collection, kind);
+
+        return coll.countDocuments();
+    }
 }

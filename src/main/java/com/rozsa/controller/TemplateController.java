@@ -37,6 +37,11 @@ public class TemplateController {
         return templateMapper.toDtos(templates);
     }
 
+    @GetMapping("/count")
+    public long count() {
+        return templateBusiness.count();
+    }
+
     @PostMapping
     public ResponseEntity<String> create(@RequestBody TemplateDto templateDto) {
         Template template = templateMapper.fromDto(templateDto);
@@ -58,8 +63,10 @@ public class TemplateController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove(@PathVariable("id") ObjectId id) {
-        templateBusiness.remove(id);
+        if (templateBusiness.remove(id)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
