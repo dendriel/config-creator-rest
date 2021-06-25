@@ -1,8 +1,8 @@
 package com.rozsa.controller;
 
 import com.rozsa.business.TemplateBusiness;
+import com.rozsa.controller.dto.BaseDto;
 import com.rozsa.controller.mapper.TemplateMapper;
-import com.rozsa.controller.dto.TemplateDto;
 import com.rozsa.model.Template;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
@@ -21,18 +21,18 @@ public class TemplateController {
     private final TemplateMapper templateMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<TemplateDto> get(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<BaseDto> get(@PathVariable("id") ObjectId id) {
         Template template = templateBusiness.find(id);
         if (template == null) {
             return ResponseEntity.notFound().build();
         }
 
-        TemplateDto dto = templateMapper.toDto(template);
+        BaseDto dto = templateMapper.toDto(template);
         return ResponseEntity.ok().body(dto);
     }
 
     @GetMapping("/all")
-    public List<TemplateDto> getAll(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+    public List<BaseDto> getAll(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         List<Template> templates = templateBusiness.findAll(offset, limit);
         return templateMapper.toDtos(templates);
     }
@@ -43,16 +43,16 @@ public class TemplateController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody TemplateDto templateDto) {
-        Template template = templateMapper.fromDto(templateDto);
+    public ResponseEntity<String> create(@RequestBody BaseDto baseDto) {
+        Template template = templateMapper.fromDto(baseDto);
         template = templateBusiness.create(template);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(template.getRawId());
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody TemplateDto templateDto) {
-        Template template = templateMapper.fromDto(templateDto);
+    public ResponseEntity<Void> update(@RequestBody BaseDto baseDto) {
+        Template template = templateMapper.fromDto(baseDto);
 
         if (templateBusiness.update(template) == null) {
             return ResponseEntity.notFound().build();
