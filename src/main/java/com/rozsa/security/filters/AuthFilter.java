@@ -1,5 +1,8 @@
 package com.rozsa.security.filters;
 
+import com.rozsa.business.UserBusiness;
+import com.rozsa.model.User;
+import com.rozsa.security.CustomUserDetails;
 import com.rozsa.service.AuthService;
 import com.rozsa.service.AuthResponse;
 import feign.FeignException;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
 public class AuthFilter extends OncePerRequestFilter {
 
     private final AuthService authService;
+    private final UserBusiness userBusiness;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
@@ -59,7 +63,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
         log.info("Validation status for token {} is {}", token, authResponse);
 
-        UserDetails userDetails = getUserDetails(authResponse);
+        CustomUserDetails userDetails = getUserDetails(authResponse);
         if (userDetails == null) {
             chain.doFilter(req, res);
             return;
@@ -73,10 +77,12 @@ public class AuthFilter extends OncePerRequestFilter {
         chain.doFilter(req, res);
     }
 
-    public UserDetails getUserDetails(AuthResponse response) {
+    public CustomUserDetails getUserDetails(AuthResponse response) {
         if (!response.isAuthenticated() || response.getUsername() == null) {
             return null;
         }
+
+        User user = userBusiness.getOrCreateUserByUserId(response.getUserId());
 
         List<GrantedAuthority> authorities = response.getAuthorities()
                 .stream()
@@ -85,6 +91,6 @@ public class AuthFilter extends OncePerRequestFilter {
 
         String username = response.getUsername();
 
-        return new org.springframework.security.core.userdetails.User(username, "", authorities);
+        return new CustomUserDetails(user, username, authorities);
     }
 }

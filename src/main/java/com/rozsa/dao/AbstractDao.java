@@ -41,6 +41,14 @@ public abstract class AbstractDao<TType extends Identifiable> {
         obj.forEach(this::save);
     }
 
+    public TType update(TType obj, String key, Object value) {
+        return db.update(obj, objKind, collectionName, key, value);
+    }
+
+    public TType find(String key, Object value) {
+        return db.find(objKind, collectionName, key, value);
+    }
+
     public TType findById(ObjectId id) {
         return db.findById(id, objKind, collectionName);
     }

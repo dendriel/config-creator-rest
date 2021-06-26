@@ -73,14 +73,14 @@ public class MongoConnection implements DatabaseConnection {
     }
 
     public <T> T create(T obj, Class<T> kind, String collection) {
-        assert obj != null : String.format("Can't save null obj!");
+        assert obj != null : "Can't save null obj!";
         MongoCollection<T> coll = db.getCollection(collection, kind);
         coll.insertOne(obj);
         return obj;
     }
 
     public <T extends Identifiable> T update(T obj, Class<T> kind, String collection) {
-        assert obj != null : String.format("Can't update null obj!");
+        assert obj != null : "Can't update null obj!";
         MongoCollection<T> coll = db.getCollection(collection, kind);
         Document targetDoc = new Document("_id", obj.getId());
         UpdateResult updateResult = coll.replaceOne(targetDoc, obj);
@@ -90,12 +90,28 @@ public class MongoConnection implements DatabaseConnection {
         return obj;
     }
 
-    public <T> T findById(ObjectId id, Class<T> kind, String collection) {
+    public <T extends Identifiable> T update(T obj, Class<T> kind, String collection, String key, Object value) {
+        assert obj != null : "Can't update null obj!";
         MongoCollection<T> coll = db.getCollection(collection, kind);
-        Document targetDoc = new Document("_id", id);
+        Document targetDoc = new Document("_id", obj.getId());
+        Document targetData = new Document(key, value);
+        UpdateResult updateResult = coll.updateOne(targetDoc, targetData);
+        if (updateResult.getMatchedCount() == 0) {
+            return null;
+        }
+        return obj;
+    }
+
+    public <T> T find(Class<T> kind, String collection, String key, Object value) {
+        MongoCollection<T> coll = db.getCollection(collection, kind);
+        Document targetDoc = new Document(key, value);
         FindIterable<T> iterDoc = coll.find(targetDoc);
 
         return iterDoc.first();
+    }
+
+    public <T> T findById(ObjectId id, Class<T> kind, String collection) {
+        return find(kind, collection, "_id", id);
     }
 
     public <T> List<T> findAll(Class<T> kind, String collection) {

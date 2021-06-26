@@ -10,6 +10,10 @@ public interface DatabaseConnection {
 
     <T extends Identifiable> T update(T obj, Class<T> kind, String collection);
 
+    <T extends Identifiable> T update(T obj, Class<T> kind, String collection, String key, Object value);
+
+    <T> T find(Class<T> kind, String collection, String key, Object value);
+
     <T> T findById(ObjectId id, Class<T> kind, String collection);
 
     <T> List<T> findAll(Class<T> kind, String collection);
