@@ -95,6 +95,7 @@ public class MongoConnection implements DatabaseConnection {
         MongoCollection<T> coll = db.getCollection(collection, kind);
         Document targetDoc = new Document("_id", obj.getId());
         Document targetData = new Document("$set", new BasicDBObject(key, value));
+
         UpdateResult updateResult = coll.updateOne(targetDoc, targetData);
         if (updateResult.getMatchedCount() == 0) {
             return null;

@@ -3,33 +3,33 @@ package com.rozsa.business.impl;
 import com.rozsa.business.UserBusiness;
 import com.rozsa.dao.UserDao;
 import com.rozsa.model.User;
-import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
 @Component
-public class UserBusinessImpl implements UserBusiness {
+public class UserBusinessImpl extends BaseBusinessImpl<User, UserDao> implements UserBusiness {
 
-    private final UserDao userDao;
+    public UserBusinessImpl(UserDao dao) {
+        super(dao);
+    }
 
     public void setDefaultProject(ObjectId id, ObjectId projectId) {
-        userDao.updateDefaultProjectId(id, projectId);
+        dao.updateDefaultProjectId(id, projectId);
     }
 
     public User create(long userId) {
         User user = new User(userId);
-        return userDao.save(user);
+        return dao.save(user);
     }
 
     @Override
     public User getOrCreateUserByUserId(long userId) {
-        User user = userDao.findByUserId(userId);
+        User user = dao.findByUserId(userId);
         if (user != null) {
             return user;
         }
 
         user = new User(userId);
-        return userDao.create(user);
+        return dao.create(user);
     }
 }

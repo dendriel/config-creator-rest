@@ -6,16 +6,15 @@ import java.util.List;
 
 public interface BaseMapper<TModel, TDto> {
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(source = "id", target = "rawId")
+    @Mapping(target = "id", expression = "java(dto.getId() != null ? new org.bson.types.ObjectId(dto.getId()) : null)")
     @Mapping(target = "data", expression = "java(new org.bson.json.JsonObject(dto.getData()))")
     TModel fromDto(TDto dto);
 
-    @Mapping(source = "rawId", target = "id")
-    @Mapping(target = "data", expression = "java(template.getData().getJson())")
-    TDto toDto(TModel template);
+    @Mapping(target = "id", expression = "java(holder.getId().toString())")
+    @Mapping(target = "data", expression = "java(holder.getData().getJson())")
+    TDto toDto(TModel holder);
 
-    @Mapping(source = "rawId", target = "id")
-    @Mapping(target = "data", expression = "java(template.getData().getJson())")
-    List<TDto> toDtos(List<TModel> templates);
+    @Mapping(target = "id", expression = "java(holder.getId().toString())")
+    @Mapping(target = "data", expression = "java(holder.getData().getJson())")
+    List<TDto> toDtos(List<TModel> holder);
 }

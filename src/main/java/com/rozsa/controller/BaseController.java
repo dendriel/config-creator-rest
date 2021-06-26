@@ -49,7 +49,7 @@ public class BaseController<
         TModel data = mapper.fromDto(templateDto);
         data = business.create(data);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(data.getRawId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(data.getId().toString());
     }
 
     @PutMapping

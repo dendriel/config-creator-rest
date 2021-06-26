@@ -12,7 +12,7 @@ import java.util.List;
 public class BaseBusinessImpl<TModel extends Identifiable, TDao extends AbstractDao<TModel>>
         implements BaseBusiness<TModel> {
 
-    private final TDao dao;
+    protected final TDao dao;
 
     @Override
     public TModel create(TModel model) {
