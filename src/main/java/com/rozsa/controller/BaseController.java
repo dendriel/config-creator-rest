@@ -19,8 +19,8 @@ public class BaseController<
         TMapper extends BaseMapper<TModel, TDto>
     > {
 
-    private final TBusiness business;
-    private final TMapper mapper;
+    protected final TBusiness business;
+    protected final TMapper mapper;
 
     @GetMapping("/{id}")
     public ResponseEntity<TDto> get(@PathVariable("id") ObjectId id) {

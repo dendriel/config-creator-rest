@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BaseMapper<TModel, TDto> {
 
-    @Mapping(target = "id", expression = "java(dto.getId() != null ? new org.bson.types.ObjectId(dto.getId()) : null)")
+    @Mapping(target = "id", expression = "java(dto.getId() != null && !dto.getId().equals(\"\")? new org.bson.types.ObjectId(dto.getId()) : null)")
     @Mapping(target = "data", expression = "java(new org.bson.json.JsonObject(dto.getData()))")
     TModel fromDto(TDto dto);
 

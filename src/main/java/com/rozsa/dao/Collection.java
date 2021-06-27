@@ -8,9 +8,9 @@ import lombok.Getter;
 public enum Collection {
     USER("user"),
     TEMPLATE("template"),
-    PROJECT("project")
+    PROJECT("project"),
+    RESOURCE("resource")
     ;
-
 
     private final String name;
 }

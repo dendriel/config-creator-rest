@@ -12,8 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
-@RequestMapping("/user")
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserBusiness userBusiness;
