@@ -115,6 +115,28 @@ public class MongoConnection implements DatabaseConnection {
         return find(kind, collection, "_id", id);
     }
 
+    public <T> List<T> findAll(Class<T> kind, String collection, String key, Object value, int offset, int limit) {
+        MongoCollection<T> coll = db.getCollection(collection, kind);
+
+        Document targetDoc = new Document(key, value);
+
+//        String[] keys = key.split("\\.");
+//
+//        String lastKey = keys[keys.length - 1];
+//        Document targetDoc = new Document(lastKey, value);
+//
+//        for (int i = keys.length - 2; i >= 0; i--) {
+//            String k = keys[i];
+//            targetDoc = new Document(k, targetDoc);
+//        }
+
+        FindIterable<T> iterDoc = coll.find(targetDoc).skip(offset).limit(limit);
+        List<T> objs = new ArrayList<>();
+        iterDoc.into(objs);
+
+        return objs;
+    }
+
     public <T> List<T> findAll(Class<T> kind, String collection) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
         FindIterable<T> iterDoc = coll.find();

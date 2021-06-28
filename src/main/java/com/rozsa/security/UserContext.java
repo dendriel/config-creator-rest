@@ -12,6 +12,10 @@ public class UserContext {
         return getUserDetails().getUser().getId();
     }
 
+    public static ObjectId getDefaultProjectId() {
+        return getUserDetails().getUser().getDefaultProjectId();
+    }
+
     public static long getUserId() {
         return getUserDetails().getUser().getUserId();
     }

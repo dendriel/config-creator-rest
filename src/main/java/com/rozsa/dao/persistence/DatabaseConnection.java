@@ -16,6 +16,8 @@ public interface DatabaseConnection {
 
     <T> T findById(ObjectId id, Class<T> kind, String collection);
 
+    <T> List<T> findAll(Class<T> kind, String collection, String key, Object value, int offset, int limit);
+
     <T> List<T> findAll(Class<T> kind, String collection);
 
     <T> List<T> findAll(Class<T> kind, String collection, int offset, int limit);

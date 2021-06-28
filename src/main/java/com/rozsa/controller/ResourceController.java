@@ -4,6 +4,8 @@ import com.rozsa.business.ResourceBusiness;
 import com.rozsa.controller.dto.BaseDto;
 import com.rozsa.controller.mapper.ResourceMapper;
 import com.rozsa.model.Resource;
+import com.rozsa.security.UserContext;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +22,8 @@ public class ResourceController extends BaseController<Resource, BaseDto, Resour
 
     @GetMapping("/all")
     public List<BaseDto> getAll(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
-        System.out.println("HERE");
-        List<Resource> templates = business.findAll(offset, limit);
+        ObjectId projectId = UserContext.getDefaultProjectId();
+        List<Resource> templates = business.findAll(projectId, offset, limit);
         return mapper.toDtos(templates);
     }
 }
