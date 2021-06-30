@@ -8,4 +8,6 @@ import java.util.List;
 public interface ResourceBusiness extends BaseBusiness<Resource> {
 
     List<Resource> findAll(ObjectId projectId, int offset, int limit);
+
+    void saveValues(List<Resource> resources);
 }

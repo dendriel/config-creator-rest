@@ -10,6 +10,10 @@ public interface BaseMapper<TModel, TDto> {
     @Mapping(target = "data", expression = "java(new org.bson.json.JsonObject(dto.getData()))")
     TModel fromDto(TDto dto);
 
+    @Mapping(target = "id", expression = "java(dto.getId() != null && !dto.getId().equals(\"\")? new org.bson.types.ObjectId(dto.getId()) : null)")
+    @Mapping(target = "data", expression = "java(new org.bson.json.JsonObject(dto.getData()))")
+    List<TModel> fromDtos(List<TDto> dto);
+
     @Mapping(target = "id", expression = "java(holder.getId().toString())")
     @Mapping(target = "data", expression = "java(holder.getData().getJson())")
     TDto toDto(TModel holder);

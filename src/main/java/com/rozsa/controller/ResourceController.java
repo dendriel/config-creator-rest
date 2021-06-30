@@ -6,10 +6,8 @@ import com.rozsa.controller.mapper.ResourceMapper;
 import com.rozsa.model.Resource;
 import com.rozsa.security.UserContext;
 import org.bson.types.ObjectId;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +23,12 @@ public class ResourceController extends BaseController<Resource, BaseDto, Resour
         ObjectId projectId = UserContext.getDefaultProjectId();
         List<Resource> templates = business.findAll(projectId, offset, limit);
         return mapper.toDtos(templates);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping("/value")
+    public void saveValues(@RequestBody List<BaseDto> resourcesDtos) {
+        List<Resource> resources = mapper.fromDtos(resourcesDtos);
+        business.saveValues(resources);
     }
 }
