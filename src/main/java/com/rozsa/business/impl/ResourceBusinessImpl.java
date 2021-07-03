@@ -43,6 +43,7 @@ public class ResourceBusinessImpl extends BaseBusinessImpl<Resource, ResourceDao
             return null;
         }
 
+        try {
         switch(componentType) {
             case "text":
             case "textarea":
@@ -52,12 +53,16 @@ public class ResourceBusinessImpl extends BaseBusinessImpl<Resource, ResourceDao
             case "toggle":
                 return value.asBoolean();
             case "list":
-                return value.asArray();
             case "template":
-                return value;
+                return value.asArray();
             default:
                 log.error("Unknown component type! {}", componentType);
                 return null;
         }
+
+        }catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return null;
     }
 }

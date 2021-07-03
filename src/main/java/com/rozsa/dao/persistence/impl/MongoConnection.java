@@ -120,16 +120,6 @@ public class MongoConnection implements DatabaseConnection {
 
         Document targetDoc = new Document(key, value);
 
-//        String[] keys = key.split("\\.");
-//
-//        String lastKey = keys[keys.length - 1];
-//        Document targetDoc = new Document(lastKey, value);
-//
-//        for (int i = keys.length - 2; i >= 0; i--) {
-//            String k = keys[i];
-//            targetDoc = new Document(k, targetDoc);
-//        }
-
         FindIterable<T> iterDoc = coll.find(targetDoc).skip(offset).limit(limit);
         List<T> objs = new ArrayList<>();
         iterDoc.into(objs);
