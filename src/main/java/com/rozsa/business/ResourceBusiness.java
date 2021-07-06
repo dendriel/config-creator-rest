@@ -9,5 +9,7 @@ public interface ResourceBusiness extends BaseBusiness<Resource> {
 
     List<Resource> findAll(ObjectId projectId, int offset, int limit);
 
+    long count(ObjectId projectId);
+
     void saveValues(List<Resource> resources);
 }

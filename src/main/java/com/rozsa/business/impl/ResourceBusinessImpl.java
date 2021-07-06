@@ -27,6 +27,11 @@ public class ResourceBusinessImpl extends BaseBusinessImpl<Resource, ResourceDao
     }
 
     @Override
+    public long count(ObjectId projectId) {
+        return dao.countByProjectId(projectId);
+    }
+
+    @Override
     public void saveValues(List<Resource> resources) {
         resources.forEach(res -> {
             dao.update(res, "data.value", getParsedValue(res));

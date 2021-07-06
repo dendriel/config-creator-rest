@@ -2,6 +2,7 @@ package com.rozsa.dao.persistence.impl;
 
 import com.mongodb.*;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.rozsa.dao.persistence.DatabaseConnection;
@@ -9,6 +10,7 @@ import com.rozsa.dao.Identifiable;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -157,5 +159,12 @@ public class MongoConnection implements DatabaseConnection {
         MongoCollection<T> coll = db.getCollection(collection, kind);
 
         return coll.countDocuments();
+    }
+
+    public <T> long count(Class<T> kind, String collection, String key, Object value) {
+        MongoCollection<T> coll = db.getCollection(collection, kind);
+
+        Bson filter = Filters.eq(key, value);
+        return coll.countDocuments(filter);
     }
 }

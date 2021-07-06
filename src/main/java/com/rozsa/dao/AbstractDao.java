@@ -72,4 +72,8 @@ public abstract class AbstractDao<TType extends Identifiable> {
     public long count() {
         return db.count(objKind, collectionName);
     }
+
+    public long count(String key, Object value) {
+        return db.count(objKind, collectionName, key, value);
+    }
 }

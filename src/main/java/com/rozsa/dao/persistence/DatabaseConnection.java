@@ -25,4 +25,6 @@ public interface DatabaseConnection {
     <T> boolean deleteById(ObjectId id, Class<T> kind, String collection);
 
     <T> long count(Class<T> kind, String collection);
+
+    <T> long count(Class<T> kind, String collection, String key, Object value);
 }

@@ -18,11 +18,19 @@ public class ResourceController extends BaseController<Resource, BaseDto, Resour
         super(business, mapper);
     }
 
+    @Override
     @GetMapping("/all")
     public List<BaseDto> getAll(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         ObjectId projectId = UserContext.getDefaultProjectId();
         List<Resource> templates = business.findAll(projectId, offset, limit);
         return mapper.toDtos(templates);
+    }
+
+    @Override
+    @GetMapping("/count")
+    public long count() {
+        ObjectId projectId = UserContext.getDefaultProjectId();
+        return business.count(projectId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
