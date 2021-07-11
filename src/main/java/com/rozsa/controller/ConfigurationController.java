@@ -34,4 +34,12 @@ public class ConfigurationController {
         ObjectId projectId = UserContext.getDefaultProjectId();
         return business.count(projectId);
     }
+
+    @GetMapping("/export")
+    public void export() {
+        ObjectId projectId = UserContext.getDefaultProjectId();
+        ObjectId id = UserContext.getId();
+
+        business.export(projectId, id);
+    }
 }

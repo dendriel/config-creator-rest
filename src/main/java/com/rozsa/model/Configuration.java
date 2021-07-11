@@ -1,19 +1,21 @@
 package com.rozsa.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.bson.types.ObjectId;
 
 import java.util.Date;
 
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Configuration extends BaseModel {
     private ObjectId id;
     private ObjectId projectId;
-    private Date createdAt;
+    private ObjectId requestedBy;
     private Date requestedAt;
-    private long createdBy;
+    private Date createdAt;
     private State state;
 
 

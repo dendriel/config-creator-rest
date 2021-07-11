@@ -2,6 +2,7 @@ package com.rozsa.dao;
 
 import com.rozsa.dao.persistence.DatabaseConnection;
 import com.rozsa.model.Resource;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import static com.rozsa.dao.Collection.RESOURCE;
@@ -12,5 +13,10 @@ public class ResourceDao extends ProjectDependentDao<Resource> {
 
     public ResourceDao(DatabaseConnection db) {
         super(db, Resource.class, RESOURCE.getName(), projectIdKey);
+    }
+
+    @Override
+    protected Object parseProjectId(ObjectId projectId) {
+        return projectId.toString();
     }
 }

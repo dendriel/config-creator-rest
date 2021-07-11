@@ -8,8 +8,8 @@ import java.util.Date;
 @Data
 public class ConfigurationDto {
     private String id;
-    private Date createdAt;
+    private String requestedBy;
     private Date requestedAt;
-    private long createdBy;
+    private Date createdAt;
     private Configuration.State state;
 }
