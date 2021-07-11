@@ -9,7 +9,8 @@ public enum Collection {
     USER("user"),
     TEMPLATE("template"),
     PROJECT("project"),
-    RESOURCE("resource")
+    RESOURCE("resource"),
+    CONFIGURATION("configuration"),
     ;
 
     private final String name;

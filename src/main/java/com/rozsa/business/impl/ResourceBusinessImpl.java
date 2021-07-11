@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.BsonDocument;
 import org.bson.BsonNull;
 import org.bson.BsonValue;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,20 +14,10 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class ResourceBusinessImpl extends BaseBusinessImpl<Resource, ResourceDao> implements ResourceBusiness {
+public class ResourceBusinessImpl extends ProjectDependentBusinessImpl<Resource, ResourceDao> implements ResourceBusiness {
 
     public ResourceBusinessImpl(ResourceDao dao) {
         super(dao);
-    }
-
-    @Override
-    public List<Resource> findAll(ObjectId projectId, int offset, int limit) {
-        return dao.findAllByProjectId(projectId, offset, limit);
-    }
-
-    @Override
-    public long count(ObjectId projectId) {
-        return dao.countByProjectId(projectId);
     }
 
     @Override
@@ -49,25 +38,24 @@ public class ResourceBusinessImpl extends BaseBusinessImpl<Resource, ResourceDao
         }
 
         try {
-        switch(componentType) {
-            case "text":
-            case "textarea":
-                return value.asString();
-            case "number":
-                return value.asNumber();
-            case "toggle":
-                return value.asBoolean();
-            case "list":
-            case "template":
-                return value.asArray();
-            default:
-                log.error("Unknown component type! {}", componentType);
-                return null;
-        }
-
-        }catch (Exception e) {
+            switch (componentType) {
+                case "text":
+                case "textarea":
+                    return value.asString();
+                case "number":
+                    return value.asNumber();
+                case "toggle":
+                    return value.asBoolean();
+                case "list":
+                case "template":
+                    return value.asArray();
+                default:
+                    log.error("Unknown component type! {}", componentType);
+                    return null;
+            }
+        } catch (Exception e) {
             System.out.println(e.toString());
+            throw e;
         }
-        return null;
     }
 }
