@@ -7,10 +7,9 @@ import com.rozsa.model.Configuration;
 import com.rozsa.security.UserContext;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,6 +20,18 @@ public class ConfigurationController {
     private final ConfigurationMapper mapper;
 
     private final ConfigurationBusiness business;
+
+    // TODO: internal usage only
+    @GetMapping("/{id}")
+    public ResponseEntity<ConfigurationDto> get(@PathVariable("id") ObjectId id) {
+        Configuration data = business.find(id);
+        if (data == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ConfigurationDto dto = mapper.toDto(data);
+        return ResponseEntity.ok().body(dto);
+    }
 
     @GetMapping("/all")
     public List<ConfigurationDto> getAll(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
@@ -35,6 +46,7 @@ public class ConfigurationController {
         return business.count(projectId);
     }
 
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @GetMapping("/export")
     public void export() {
         ObjectId projectId = UserContext.getDefaultProjectId();
