@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 public class ConfigurationDto {
     private String id;
+    private String projectId;
     private String requestedBy;
     private Date requestedAt;
     private Date createdAt;

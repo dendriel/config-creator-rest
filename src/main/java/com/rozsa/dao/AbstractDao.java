@@ -61,6 +61,10 @@ public abstract class AbstractDao<TType extends Identifiable> {
         return db.findAll(objKind, collectionName, key, value, offset, limit);
     }
 
+    public List<TType> findAll(String key, Object value) {
+        return db.findAll(objKind, collectionName, key, value);
+    }
+
     public List<TType> findAll(int offset, int limit) {
         return db.findAll(objKind, collectionName, offset, limit);
     }

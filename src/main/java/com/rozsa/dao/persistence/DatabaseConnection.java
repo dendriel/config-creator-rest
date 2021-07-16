@@ -18,6 +18,8 @@ public interface DatabaseConnection {
 
     <T> List<T> findAll(Class<T> kind, String collection, String key, Object value, int offset, int limit);
 
+    <T> List<T> findAll(Class<T> kind, String collection, String key, Object value);
+
     <T> List<T> findAll(Class<T> kind, String collection);
 
     <T> List<T> findAll(Class<T> kind, String collection, int offset, int limit);

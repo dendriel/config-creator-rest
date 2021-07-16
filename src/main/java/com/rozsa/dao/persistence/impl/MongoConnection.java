@@ -74,6 +74,7 @@ public class MongoConnection implements DatabaseConnection {
         return plainDb.withCodecRegistry(pojoCodecRegistry);
     }
 
+    @Override
     public <T> T create(T obj, Class<T> kind, String collection) {
         assert obj != null : "Can't save null obj!";
         MongoCollection<T> coll = db.getCollection(collection, kind);
@@ -81,6 +82,7 @@ public class MongoConnection implements DatabaseConnection {
         return obj;
     }
 
+    @Override
     public <T extends Identifiable> T update(T obj, Class<T> kind, String collection) {
         assert obj != null : "Can't update null obj!";
         MongoCollection<T> coll = db.getCollection(collection, kind);
@@ -92,6 +94,7 @@ public class MongoConnection implements DatabaseConnection {
         return obj;
     }
 
+    @Override
     public <T extends Identifiable> T update(T obj, Class<T> kind, String collection, String key, Object value) {
         assert obj != null : "Can't update null obj!";
         MongoCollection<T> coll = db.getCollection(collection, kind);
@@ -105,6 +108,7 @@ public class MongoConnection implements DatabaseConnection {
         return obj;
     }
 
+    @Override
     public <T> T find(Class<T> kind, String collection, String key, Object value) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
         Document targetDoc = new Document(key, value);
@@ -113,22 +117,40 @@ public class MongoConnection implements DatabaseConnection {
         return iterDoc.first();
     }
 
+    @Override
     public <T> T findById(ObjectId id, Class<T> kind, String collection) {
         return find(kind, collection, "_id", id);
     }
 
+    @Override
     public <T> List<T> findAll(Class<T> kind, String collection, String key, Object value, int offset, int limit) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
 
         Document targetDoc = new Document(key, value);
 
-        FindIterable<T> iterDoc = coll.find(targetDoc).skip(offset).limit(limit);
+        FindIterable<T> iterDoc = coll.find(targetDoc)
+                .skip(offset)
+                .limit(limit);
+
         List<T> objs = new ArrayList<>();
         iterDoc.into(objs);
 
         return objs;
     }
 
+    @Override
+    public <T> List<T> findAll(Class<T> kind, String collection, String key, Object value) {
+        MongoCollection<T> coll = db.getCollection(collection, kind);
+        Document targetDoc = new Document(key, value);
+
+        FindIterable<T> iterDoc = coll.find(targetDoc);
+        List<T> objs = new ArrayList<>();
+        iterDoc.into(objs);
+
+        return objs;
+    }
+
+    @Override
     public <T> List<T> findAll(Class<T> kind, String collection) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
         FindIterable<T> iterDoc = coll.find();
@@ -138,6 +160,7 @@ public class MongoConnection implements DatabaseConnection {
         return objs;
     }
 
+    @Override
     public <T> List<T> findAll(Class<T> kind, String collection, int offset, int limit) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
         FindIterable<T> iterDoc = coll.find().skip(offset).limit(limit);
@@ -147,6 +170,7 @@ public class MongoConnection implements DatabaseConnection {
         return objs;
     }
 
+    @Override
     public <T> boolean deleteById(ObjectId id, Class<T> kind, String collection) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
         Document targetDoc = new Document("_id", id);
@@ -155,12 +179,14 @@ public class MongoConnection implements DatabaseConnection {
         return result.getDeletedCount() > 0;
     }
 
+    @Override
     public <T> long count(Class<T> kind, String collection) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
 
         return coll.countDocuments();
     }
 
+    @Override
     public <T> long count(Class<T> kind, String collection, String key, Object value) {
         MongoCollection<T> coll = db.getCollection(collection, kind);
 

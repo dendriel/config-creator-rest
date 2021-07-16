@@ -21,6 +21,11 @@ public class ProjectDependentBusinessImpl<TModel extends Identifiable, TDao exte
     }
 
     @Override
+    public List<TModel> findAll(ObjectId projectId) {
+        return dao.findAllByProjectId(projectId);
+    }
+
+    @Override
     public long count(ObjectId projectId) {
         return dao.countByProjectId(projectId);
     }

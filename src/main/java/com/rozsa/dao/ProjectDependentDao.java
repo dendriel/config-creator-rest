@@ -20,6 +20,10 @@ public abstract class ProjectDependentDao<TType extends Identifiable> extends Ab
         return findAll(projectIdKey, parseProjectId(projectId), offset, limit);
     }
 
+    public List<TType> findAllByProjectId(ObjectId projectId) {
+        return findAll(projectIdKey, parseProjectId(projectId));
+    }
+
     public long countByProjectId(ObjectId projectId) {
         return count(projectIdKey, parseProjectId(projectId));
     }

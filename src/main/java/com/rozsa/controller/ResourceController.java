@@ -39,4 +39,11 @@ public class ResourceController extends BaseController<Resource, BaseDto, Resour
         List<Resource> resources = mapper.fromDtos(resourcesDtos);
         business.saveValues(resources);
     }
+
+    // TODO: add authorization
+    @GetMapping("/all/{projectId}")
+    public List<BaseDto> getAllByProjectId(@PathVariable("projectId") ObjectId projectId) {
+        List<Resource> templates = business.findAll(projectId);
+        return mapper.toDtos(templates);
+    }
 }
