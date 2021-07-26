@@ -25,9 +25,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'io.cucumber:cucumber-java:6.10.4'
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
