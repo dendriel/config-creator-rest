@@ -13,6 +13,10 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    cucumberVersion = '6.10.4'
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -25,9 +29,17 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
+//    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:3.0.3'
+//    testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+//    testImplementation 'org.testcontainers:mockserver:1.16.0'
+//    testImplementation 'org.mock-server:mockserver-client-java'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testImplementation 'io.cucumber:cucumber-java:6.10.4'
-    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-spring:${cucumberVersion}"
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
