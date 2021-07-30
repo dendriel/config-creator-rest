@@ -31,8 +31,8 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
-//    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:3.0.3'
-//    testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:3.0.3'
+    testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
 //    testImplementation 'org.testcontainers:mockserver:1.16.0'
 //    testImplementation 'org.mock-server:mockserver-client-java'
 

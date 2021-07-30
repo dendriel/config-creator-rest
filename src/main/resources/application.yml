@@ -9,3 +9,13 @@ server:
 auth:
   service:
     url: ${AUTH_URL:http://localhost:8080}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+auth:
+  service:
+    url: http://localhost:${wiremock.server.port}
