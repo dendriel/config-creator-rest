@@ -7,6 +7,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.rozsa.dao.persistence.DatabaseConnection;
 import com.rozsa.dao.Identifiable;
+import io.micrometer.core.instrument.util.StringUtils;
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -48,13 +49,16 @@ public class MongoConnection implements DatabaseConnection {
     private MongoClient createClient(String host, Integer port, String user, String pass, String dbName) {
         final ServerAddress serverAddress = new ServerAddress(host, port);
 
-        MongoCredential credential = MongoCredential.createCredential(user, dbName, pass.toCharArray());
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .credential(credential)
-                .applyToClusterSettings(builder ->
-                        builder.hosts(Collections.singletonList(serverAddress)))
-                .writeConcern(WriteConcern.JOURNALED)
-                .build();
+        MongoClientSettings.Builder builder = MongoClientSettings.builder()
+                .applyToClusterSettings(b -> b.hosts(Collections.singletonList(serverAddress)))
+                .writeConcern(WriteConcern.JOURNALED);
+
+        if (StringUtils.isNotEmpty(user) && StringUtils.isNotEmpty(pass)) {
+            MongoCredential credential = MongoCredential.createCredential(user, dbName, pass.toCharArray());
+            builder.credential(credential);
+        }
+
+        MongoClientSettings settings = builder.build();
 
         return MongoClients.create(settings);
     }

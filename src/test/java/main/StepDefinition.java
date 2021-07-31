@@ -1,14 +1,18 @@
 package main;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.rozsa.controller.dto.BaseDto;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -16,18 +20,18 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class StepDefinition extends IntegrationTest {
 
+    private static final Logger log = LoggerFactory.getLogger(StepDefinition.class);
+
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private ResponseEntity<String> response;
+    private final Map<String, String> requestHeaders;
 
-    private Map<String, String> requestHeaders;
+    private String resourceId;
 
     public StepDefinition() {
         requestHeaders = new HashMap<>();
     }
-
-    String data = "";
 
     @Given("request is setup with headers")
     public void setupRequest(Map<String, String> headers) {
@@ -47,42 +51,51 @@ public class StepDefinition extends IntegrationTest {
         );
     }
 
-    @When("create template API is setup and will return id {string}")
-    public void setupCreateTemplateApi(String id) {
-        stubFor(WireMock.post("/template")
-                .willReturn(aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withFixedDelay(1)
-                        .withBody(id)
-                )
-        );
-    }
-
-    @When("creating a template with data {string}")
+    @When("create a template with data {string}")
     public void createTemplate(String data) {
-        System.out.println("Create template with data: " + data);
+        log.info("Create template with data: {}", data);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         requestHeaders.forEach(headers::add);
 
-        HttpEntity<String> request = new HttpEntity<>(headers);
+        BaseDto dto = new BaseDto(data);
+        HttpEntity<BaseDto> request = new HttpEntity<>(dto, headers);
 
-        response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.postForEntity(
                 "/template",
-                HttpMethod.GET,
                 request,
                 String.class
         );
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        // TODO: get id from response body (if any).
-        this.data = data;
+        assertNotNull(response.getBody());
+
+        resourceId = response.getBody();
+        log.info("Resource created with ID: {}", resourceId);
     }
 
     @Then("last created template has data {string}")
     public void findLastTemplateCreated(String data) {
-        System.out.println("Find template with data: " + data);
-        assertEquals("Data found don't have the expected value.", this.data, data);
+        log.info("Find template with data: " + data);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        requestHeaders.forEach(headers::add);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        ResponseEntity<BaseDto> response = restTemplate.exchange(
+                String.format("/template/%s", resourceId),
+                HttpMethod.GET,
+                request,
+                BaseDto.class
+        );
+
+        BaseDto template = response.getBody();
+
+        assertNotNull(template);
+        assertEquals(resourceId, template.getId());
+        assertEquals(data, template.getData());
     }
 }
