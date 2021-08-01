@@ -37,7 +37,7 @@ Feature: Test Template resource API
       | {"name": "dummy03"} |
       | {"name": "dummy04"} |
       | {"name": "dummy05"} |
-    Then all templates in offset 2 limit 2 should be
+    Then get all templates in offset 2 limit 2 should be
       | {"name": "dummy03"} |
       | {"name": "dummy04"} |
 
