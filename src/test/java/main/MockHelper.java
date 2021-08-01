@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class MockHelper {
+
     public void setupAuthenticationService(String token) {
         stubFor(WireMock.get("/validate")
                 .withHeader(HttpHeaders.AUTHORIZATION, matching(token))

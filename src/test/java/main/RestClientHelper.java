@@ -3,8 +3,10 @@ package main;
 import com.rozsa.controller.dto.BaseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,16 +14,16 @@ import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 
-
+@Component
 public class RestClientHelper {
     private static final Logger log = LoggerFactory.getLogger(RestClientHelper.class);
 
-    private final TestRestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     private final Map<String, String> requestHeaders;
 
-    public RestClientHelper(TestRestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public RestClientHelper() {
         requestHeaders = new HashMap<>();
     }
 

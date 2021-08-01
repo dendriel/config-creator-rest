@@ -10,7 +10,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @CucumberContextConfiguration
-@SpringBootTest(classes = { Application.class, MongoDBServerContainer.class },
+@SpringBootTest(classes = {
+        Application.class,
+        MongoDBServerContainer.class,
+        RestClientHelper.class,
+        MockHelper.class
+    },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = 0)
 public class IntegrationTest {
