@@ -46,7 +46,7 @@ public class MongoConnection implements DatabaseConnection {
         db = getDatabase(dbName);
     }
 
-    private MongoClient createClient(String host, Integer port, String user, String pass, String dbName) {
+    public static MongoClient createClient(String host, Integer port, String user, String pass, String dbName) {
         final ServerAddress serverAddress = new ServerAddress(host, port);
 
         MongoClientSettings.Builder builder = MongoClientSettings.builder()
