@@ -54,4 +54,16 @@ public class ConfigurationController {
 
         business.export(projectId, id);
     }
+
+    @PatchMapping
+    public ResponseEntity<Void> update(@RequestBody ConfigurationDto dto) {
+        Configuration configuration = mapper.fromDto(dto);
+
+        Configuration saved = business.update(configuration);
+        if (saved == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
+    }
 }

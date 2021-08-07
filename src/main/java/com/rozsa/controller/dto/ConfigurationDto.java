@@ -10,6 +10,7 @@ public class ConfigurationDto {
     private String id;
     private String projectId;
     private String requestedBy;
+    private Long resourceId;
     private Date requestedAt;
     private Date createdAt;
     private Configuration.State state;

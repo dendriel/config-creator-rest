@@ -14,6 +14,7 @@ public class Configuration extends BaseModel {
     private ObjectId id;
     private ObjectId projectId;
     private ObjectId requestedBy;
+    private Long resourceId;
     private Date requestedAt;
     private Date createdAt;
     private State state;
