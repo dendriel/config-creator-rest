@@ -21,7 +21,7 @@ public class ConfigurationController {
 
     private final ConfigurationBusiness business;
 
-    // TODO: internal usage only by export-service
+    // TODO: internal usage only by exporter-service
     @GetMapping("/{id}")
     public ResponseEntity<ConfigurationDto> get(@PathVariable("id") ObjectId id) {
         Configuration data = business.find(id);

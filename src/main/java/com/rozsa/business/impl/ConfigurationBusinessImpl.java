@@ -3,6 +3,7 @@ package com.rozsa.business.impl;
 import com.rozsa.business.ConfigurationBusiness;
 import com.rozsa.dao.ConfigurationDao;
 import com.rozsa.model.Configuration;
+import com.rozsa.service.exporter.ConfigurationExporterService;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,12 @@ import static com.rozsa.model.Configuration.State.READY;
 
 @Component
 public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Configuration, ConfigurationDao> implements ConfigurationBusiness {
-    public ConfigurationBusinessImpl(ConfigurationDao dao) {
+
+    private final ConfigurationExporterService exporterService;
+
+    public ConfigurationBusinessImpl(ConfigurationDao dao, ConfigurationExporterService exporterService) {
         super(dao);
+        this.exporterService = exporterService;
     }
 
     @Override
@@ -24,7 +29,7 @@ public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Conf
 
         Configuration saved = dao.save(configuration);
 
-        System.out.println(saved);
+        exporterService.requestConfigurationExport(saved.getId());
     }
 
     @Override

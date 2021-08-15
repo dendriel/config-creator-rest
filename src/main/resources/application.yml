@@ -10,6 +10,13 @@ auth:
   service:
     url: ${AUTH_URL:http://localhost:8080}
 
+exporter:
+  queue:
+    name: export-request
+    url: http://localhost:9324
+    region: local
+
+
 ---
 spring:
   config:
