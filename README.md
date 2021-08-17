@@ -61,3 +61,33 @@ mongo.db.name=${MONGO_DB_NAME:config_creator}
 mongo.db.user=${MONGO_DB_USER:root}
 mongo.db.pass=${MONGO_DB_PASS:pass}
 ```
+
+
+## Run with Docker
+
+Build the image:
+```shell
+docker build -t dendriel/config-creator-rest .
+```
+
+Start local SQS dependency:
+```shell
+docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -v /e/workspace/Java/config-creator-rest/docker/sqs:/opt/custom -d roribio16/alpine-sqs:latest
+```
+
+Start config-creator-rest:
+```shell
+docker run --name config-creator-rest -p 8081:8081 -e MONGO_DB_HOST=192.168.15.9  -e AUTH_SERVICE_URL=http://192.168.15.9:8080  -e EXPORTER_QUEUE_URL=http://192.168.15.9:9324 -e AWS_ACCESS_KEY_ID=1234 -e AWS_SECRET_KEY=456 dendriel/config-creator-rest
+```
+- Replace 192.168.15.9 with your local ip address (or where the mongo server, authentication server and SQS are available).
+- Start the storage-service (dendriel/npc-data-manager-auth);
+- Start the auth-service (dendriel/npc-data-manager-storage);
+- Also, setup a mongoDB server.
+
+## Run with docker-compose
+
+```shell
+docker-compose up -d
+```
+
+- Also, setup a mongoDB server.

@@ -8,13 +8,13 @@ server:
 
 auth:
   service:
-    url: ${AUTH_URL:http://localhost:8080}
+    url: ${AUTH_SERVICE_URL:http://localhost:8080}
 
 exporter:
   queue:
-    name: export-request
-    url: http://localhost:9324
-    region: local
+    name: ${EXPORTER_QUEUE_NAME:export-request}
+    url: ${EXPORTER_QUEUE_URL:http://localhost:9324}
+    region: ${EXPORTER_QUEUE_REGION:local}
 
 
 ---
