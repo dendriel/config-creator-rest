@@ -39,7 +39,7 @@ public class ConfigurationExporterSQS implements ConfigurationExporterService {
 
         SendMessageRequest send_msg_request = new SendMessageRequest()
                 .withQueueUrl(queueUrl)
-                .withMessageBody(exportRequest.enconde());
+                .withMessageBody(exportRequest.encode());
 
         try {
             sqs.sendMessage(send_msg_request);
@@ -52,8 +52,8 @@ public class ConfigurationExporterSQS implements ConfigurationExporterService {
     private static class ExportRequest {
         private final String configId;
 
-        public String enconde() {
-            return String.format("{\"id\":%s}", configId);
+        public String encode() {
+            return String.format("{\"id\":\"%s\"}", configId);
         }
     }
 }
