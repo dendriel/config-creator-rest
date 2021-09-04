@@ -6,4 +6,6 @@ import org.bson.types.ObjectId;
 public interface ConfigurationBusiness extends ProjectDependentBusiness<Configuration> {
 
     void export(ObjectId projectId, ObjectId requesterId);
+
+    boolean retryExport(ObjectId id);
 }

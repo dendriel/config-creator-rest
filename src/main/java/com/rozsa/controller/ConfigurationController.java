@@ -55,6 +55,15 @@ public class ConfigurationController {
         business.export(projectId, id);
     }
 
+    @GetMapping("/export/retry/{id}")
+    public ResponseEntity<Void> retryExport(@PathVariable("id") ObjectId id) {
+        if (business.retryExport(id)) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     @PatchMapping
     public ResponseEntity<Void> update(@RequestBody ConfigurationDto dto) {
         Configuration configuration = mapper.fromDto(dto);

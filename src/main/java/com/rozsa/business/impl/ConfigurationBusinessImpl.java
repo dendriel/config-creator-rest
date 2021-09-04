@@ -1,6 +1,7 @@
 package com.rozsa.business.impl;
 
 import com.rozsa.business.ConfigurationBusiness;
+import com.rozsa.controller.exception.UnprocessableEntityException;
 import com.rozsa.dao.ConfigurationDao;
 import com.rozsa.model.Configuration;
 import com.rozsa.service.exporter.ConfigurationExporterService;
@@ -8,9 +9,12 @@ import com.rozsa.service.storage.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
+import java.nio.charset.Charset;
 import java.util.Date;
 
+import static com.rozsa.model.Configuration.State.FAILED;
 import static com.rozsa.model.Configuration.State.READY;
 
 
@@ -38,6 +42,28 @@ public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Conf
     }
 
     @Override
+    public boolean retryExport(ObjectId id) {
+        Configuration saved = find(id);
+        if (saved == null) {
+            return false;
+        }
+
+        if (!saved.getState().equals(FAILED)) {
+            log.error("Can't retry export configuration {} because it may be still being processed.", saved.getResourceId());
+            throw new UnprocessableEntityException();
+        }
+
+        Date requestedAt = new Date();
+        saved.setState(Configuration.State.REQUESTED);
+        saved.setRequestedAt(requestedAt);
+
+        dao.update(saved);
+        exporterService.requestConfigurationExport(saved.getId());
+
+        return true;
+    }
+
+    @Override
     public Configuration update(Configuration configuration) {
         Configuration saved = find(configuration.getId());
         if (saved == null) {
@@ -61,6 +87,11 @@ public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Conf
             return false;
         }
 
+        if (saved.getState().equals(FAILED)) {
+            log.info("Failed export request {} was removed from database.", saved.getResourceId());
+            return super.remove(id);
+        }
+
         try {
             /* A better way to handle this would be to generate a 'deletion' event after removing the configuration from
              * database. Then storage-service would listen to this event and do everything needed. The user don't care nor
@@ -72,7 +103,7 @@ public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Conf
             return false;
         }
 
-        log.info("Resource {} was removed from storage.", saved.getResourceId());
+        log.info("Resource {} was removed.", saved.getResourceId());
 
         return super.remove(id);
     }
