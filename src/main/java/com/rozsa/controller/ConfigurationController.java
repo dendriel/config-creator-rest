@@ -66,4 +66,13 @@ public class ConfigurationController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remove(@PathVariable("id") ObjectId id) {
+        if (business.remove(id)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }

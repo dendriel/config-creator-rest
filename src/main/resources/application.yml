@@ -6,6 +6,11 @@ server:
     include-stacktrace: on_param
     include-exception: true
 
+service:
+  url: ${SERVICE_URL:http://localhost:3000}
+  auth:
+    key: ${SERVICE_AUTH_KEY}
+
 auth:
   service:
     url: ${AUTH_SERVICE_URL:http://localhost:8080}

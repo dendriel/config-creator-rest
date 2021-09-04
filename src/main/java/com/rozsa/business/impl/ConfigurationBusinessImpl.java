@@ -4,6 +4,8 @@ import com.rozsa.business.ConfigurationBusiness;
 import com.rozsa.dao.ConfigurationDao;
 import com.rozsa.model.Configuration;
 import com.rozsa.service.exporter.ConfigurationExporterService;
+import com.rozsa.service.storage.StorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
@@ -12,14 +14,17 @@ import java.util.Date;
 import static com.rozsa.model.Configuration.State.READY;
 
 
+@Slf4j
 @Component
 public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Configuration, ConfigurationDao> implements ConfigurationBusiness {
 
     private final ConfigurationExporterService exporterService;
+    private final StorageService storageService;
 
-    public ConfigurationBusinessImpl(ConfigurationDao dao, ConfigurationExporterService exporterService) {
+    public ConfigurationBusinessImpl(ConfigurationDao dao, ConfigurationExporterService exporterService, StorageService storageService) {
         super(dao);
         this.exporterService = exporterService;
+        this.storageService = storageService;
     }
 
     @Override
@@ -47,5 +52,28 @@ public class ConfigurationBusinessImpl extends ProjectDependentBusinessImpl<Conf
         saved.setResourceId(configuration.getResourceId());
 
         return super.update(saved);
+    }
+
+    @Override
+    public boolean remove(ObjectId id) {
+        Configuration saved = find(id);
+        if (saved == null) {
+            return false;
+        }
+
+        try {
+            /* A better way to handle this would be to generate a 'deletion' event after removing the configuration from
+             * database. Then storage-service would listen to this event and do everything needed. The user don't care nor
+             * want to wait for the 'real' resource removal.
+             */
+            storageService.deleteResource(saved.getResourceId());
+        } catch (Exception ex) {
+            log.error("Failed to request resource {} removal from storage.", saved.getResourceId(), ex);
+            return false;
+        }
+
+        log.info("Resource {} was removed from storage.", saved.getResourceId());
+
+        return super.remove(id);
     }
 }

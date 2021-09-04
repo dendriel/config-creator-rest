@@ -1,4 +1,4 @@
-package com.rozsa.service;
+package com.rozsa.service.authentication;
 
 import lombok.Data;
 
