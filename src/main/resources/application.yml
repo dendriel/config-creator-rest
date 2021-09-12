@@ -6,21 +6,19 @@ server:
     include-stacktrace: on_param
     include-exception: true
 
+  servlet:
+    context-path: ${BASE_PATH:}
+
 service:
   url: ${SERVICE_URL:http://localhost:3000}
   auth:
     key: ${SERVICE_AUTH_KEY}
-
-auth:
-  service:
-    url: ${AUTH_SERVICE_URL:http://localhost:8080}
 
 exporter:
   queue:
     name: ${EXPORTER_QUEUE_NAME:export-request}
     url: ${EXPORTER_QUEUE_URL:http://localhost:9324}
     region: ${EXPORTER_QUEUE_REGION:local}
-
 
 ---
 spring:

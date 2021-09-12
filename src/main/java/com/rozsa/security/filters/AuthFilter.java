@@ -46,6 +46,7 @@ public class AuthFilter extends OncePerRequestFilter {
         try {
             authResponse = authService.validate(token);
         } catch (feign.RetryableException e) {
+            log.error("AuthService failed to validate token {}.", token, e);
             res.setStatus(HttpStatus.GATEWAY_TIMEOUT.value());
             return;
         }
