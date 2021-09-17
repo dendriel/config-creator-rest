@@ -9,10 +9,12 @@ import com.rozsa.service.exporter.ConfigurationExporterService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@ConditionalOnProperty(value="exporter.enabled", havingValue = "true", matchIfMissing = true)
 public class ConfigurationExporterSQS implements ConfigurationExporterService {
     private final AmazonSQS sqs;
 

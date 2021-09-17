@@ -15,6 +15,7 @@ service:
     key: ${SERVICE_AUTH_KEY}
 
 exporter:
+  enabled: ${EXPORTER_ENABLED:true}
   queue:
     name: ${EXPORTER_QUEUE_NAME:export-request}
     url: ${EXPORTER_QUEUE_URL:http://localhost:9324}
