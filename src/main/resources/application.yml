@@ -13,6 +13,7 @@ service:
   url: ${SERVICE_URL:http://localhost:3000}
   auth:
     key: ${SERVICE_AUTH_KEY}
+    cookie: ${SERVICE_AUTH_COOKIE:AUCC}
 
 exporter:
   enabled: ${EXPORTER_ENABLED:true}
