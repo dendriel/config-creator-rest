@@ -38,7 +38,13 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-        String token = "Bearer " + getToken(req);
+        String jwt = getToken(req);
+        if (jwt == null) {
+            chain.doFilter(req, res);
+            return;
+        }
+
+        String token = "Bearer " + jwt;
         AuthResponse authResponse;
         try {
             authResponse = authService.validate(token);
@@ -90,7 +96,6 @@ public class AuthFilter extends OncePerRequestFilter {
 
         return new CustomUserDetails(user, username, authorities);
     }
-
 
     public String getToken(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
